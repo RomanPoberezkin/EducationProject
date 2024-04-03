@@ -17,6 +17,7 @@
 AEducationProjectCharacter::AEducationProjectCharacter()
 {
 	// Set size for collision capsule
+	//
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
 	// Don't rotate when the controller rotates. Let that just affect the camera.
@@ -66,6 +67,32 @@ void AEducationProjectCharacter::BeginPlay()
 	}
 }
 
+void AEducationProjectCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	// Sprinting();
+}
+
+void AEducationProjectCharacter::StartSprint()
+{
+	bIsSprinting=true;
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = 2000;
+}
+
+void AEducationProjectCharacter::EndSprint()
+{
+	bIsSprinting=false;
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = 500;
+}
+
+void AEducationProjectCharacter::Sprinting()
+{
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = bIsSprinting ? 2000 : 500;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -83,6 +110,8 @@ void AEducationProjectCharacter::SetupPlayerInputComponent(class UInputComponent
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEducationProjectCharacter::Look);
+		EnhancedInputComponent->BindAction(Sprint, ETriggerEvent::Triggered, this, &AEducationProjectCharacter::StartSprint);
+		EnhancedInputComponent->BindAction(Sprint, ETriggerEvent::Completed, this, &AEducationProjectCharacter::EndSprint );
 
 	}
 

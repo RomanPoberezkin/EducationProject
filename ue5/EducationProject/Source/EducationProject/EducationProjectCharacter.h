@@ -13,6 +13,9 @@ class AEducationProjectCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	//
+	//
+	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -37,8 +40,13 @@ class AEducationProjectCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Sprint;
+
 public:
 	AEducationProjectCharacter();
+
+	bool GetIsSprinting () const {return  bIsSprinting;}
 	
 
 protected:
@@ -56,11 +64,22 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+
+	bool bIsSprinting = false;
+
+	void StartSprint ();
+	void EndSprint ();
+	void Sprinting ();
+
+	
 };
 
