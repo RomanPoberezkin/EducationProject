@@ -20,9 +20,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,27 +32,13 @@ protected:
 	UPROPERTY (VisibleAnywhere, BlueprintReadOnly, Category="Settings | Camera")
 	class UCameraComponent* CameraComponent;
 
+	UPROPERTY (VisibleAnywhere, BlueprintReadOnly, Category="Settings | Components")
+	class UEPContionsComponent* ConditionComponent;
+	
+
 public:
 	
-	//INPUT
 	
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	class UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	UInputAction* Moving;
-
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	UInputAction* Looking;
-
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	UInputAction* Sprint;
-
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	UInputAction* Crouching;
-
-	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category= "Settings | Input")
-	UInputAction* Jumping;
 
 	
 
@@ -75,6 +59,9 @@ public:
 	void Look (const FInputActionValue& Value);
 	void SprintStart ();
 	void SprintEnd ();
+
+	void JumpingStart ();
+	void JumpingEnd ();
 	
 
 

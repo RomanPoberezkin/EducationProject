@@ -10,13 +10,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EducationProject/Core/Components/EPContionsComponent.h"
 
 
 AEPBaseCharacter::AEPBaseCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super (ObjectInitializer.SetDefaultSubobjectClass<UEPCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 	
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -38,18 +38,14 @@ AEPBaseCharacter::AEPBaseCharacter(const FObjectInitializer& ObjectInitializer)
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 400.0f; 
 	SpringArm->bUsePawnControlRotation = true;
-
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
-}
 
+	ConditionComponent= CreateDefaultSubobject<UEPContionsComponent>(TEXT("ConditionComponent"));
 
-void AEPBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	CharacterMovement = Cast<UEPCharacterMovementComponent>(GetMovementComponent());
 }
 
 void AEPBaseCharacter::BeginPlay()
@@ -94,18 +90,43 @@ void AEPBaseCharacter::Look(const FInputActionValue& Value)
 
 void AEPBaseCharacter::SprintStart()
 {
+	if (!ConditionComponent->GetSprintingCondition()&&!ConditionComponent->GetTiredCondition())
+	{
+		ConditionComponent->SetSprintingCondition(true);
+		CharacterMovement->SprintStart();
+	}
 }
 
 void AEPBaseCharacter::SprintEnd()
 {
+	if (!ConditionComponent->GetSprintingCondition())
+	{
+		return;
+	}
+	if (ConditionComponent->GetSprintingCondition())
+	{
+		ConditionComponent->SetSprintingCondition(false);
+		CharacterMovement->SprintEnd();
+	}
 }
 
-// Called every frame
-void AEPBaseCharacter::Tick(float DeltaTime)
+void AEPBaseCharacter::JumpingStart()
 {
-	Super::Tick(DeltaTime);
-
+	if (!ConditionComponent->GetTiredCondition())
+	{
+		//TODO Add Change JumpHight value
+		Jump();
+	}
 }
+
+void AEPBaseCharacter::JumpingEnd()
+{
+	
+	StopJumping();
+}
+
+
+
 
 
 

@@ -23,7 +23,7 @@ protected:
 	virtual void SetupInputComponent() override;
 
 	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category = "Settings | Input")
-	class UInputMappingContext* DefaultMappingContext;
+	class UInputMappingContext* AdvancedActionMappingContext;
 
 	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category = "Settings | Input")
 	UInputAction* MoveAction;
@@ -34,6 +34,9 @@ protected:
 	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category = "Settings | Input")
 	UInputAction* SprintAction;
 
+	UPROPERTY (EditDefaultsOnly, BlueprintReadOnly, Category = "Settings | Input")
+	UInputAction* JumpAction;
+
 private:
 
 	TWeakObjectPtr<AEPBaseCharacter> CachedCharacter;
@@ -41,6 +44,11 @@ private:
 
 	void Moving( const FInputActionValue& Value);
 	void Looking( const FInputActionValue& Value);
+	void SprintStart();
+	void SprintEnd ();
+	void JumpStart ();
+	void JumpEnd ();
+	
 
 	
 };
